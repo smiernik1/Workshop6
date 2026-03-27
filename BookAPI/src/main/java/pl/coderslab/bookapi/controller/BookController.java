@@ -1,5 +1,6 @@
 package pl.coderslab.bookapi.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class BookController {
     }
 
 
-    @RequestMapping()
+    @GetMapping()
     public List<Book> get() {
         return jpaBookService.getBooks();
     }
@@ -34,6 +35,7 @@ public class BookController {
         });
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public String add(@RequestBody Book book) {
         jpaBookService.add(book);
@@ -41,14 +43,24 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") long id) {
-        jpaBookService.delete(id);
-        return "Book has been deleted successfully";
+    public String delete(@PathVariable("id") long id, HttpServletResponse response) {
+        if (jpaBookService.get(id).isPresent()) {
+            jpaBookService.delete(id);
+            response.setStatus(HttpStatus.OK.value());
+            return "Book has been deleted successfully";
+        }
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        return "Book not found";
     }
 
     @PutMapping()
-    public String update(@RequestBody Book book) {
-        jpaBookService.update(book);
-        return "Book has been updated successfully";
+    public String update(@RequestBody Book book, HttpServletResponse response) {
+        if (jpaBookService.get(book.getId()).isPresent()) {
+            jpaBookService.update(book);
+            response.setStatus(HttpStatus.OK.value());
+            return "Book has been updated successfully";
+        }
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        return "Book not found";
     }
 }

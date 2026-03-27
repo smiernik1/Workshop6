@@ -1,0 +1,36 @@
+### GET all books
+GET http://localhost:8080/books
+Accept: application/json
+
+### GET book by ID
+GET http://localhost:8080/books/1
+Accept: application/json
+
+### Send POST request to add book
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+  "isbn": "9780747532743",
+  "title": "Harry Potter i Kamień Filozoficzny",
+  "author": "J.K. Rowling",
+  "publisher": "Bloomsbury",
+  "type": "fantasy"
+}
+
+### DELETE book by ID
+DELETE http://localhost:8080/books/5
+
+
+### PUT update existing book
+PUT http://localhost:8080/books
+Content-Type: application/json
+
+{
+  "id": 5,
+  "isbn": "9780747532743",
+  "title": "Harry Potter i Czara Ognia",
+  "author": "J.K. Rowling",
+  "publisher": "Bloomsbury",
+  "type": "fantasy"
+}
